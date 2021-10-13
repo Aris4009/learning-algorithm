@@ -1,4 +1,4 @@
-package chapter1.bag;
+package cn.my.chapter_1.bag;
 
 import java.lang.reflect.Array;
 import java.util.*;
