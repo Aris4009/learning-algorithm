@@ -15,13 +15,19 @@
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <jdk.version>1.8</jdk.version>
         <hutool.version>5.7.13</hutool.version>
         <logback.version>1.2.6</logback.version>
         <apache.maven.version>3.8.1</apache.maven.version>
         <apache.maven.surefire.version>3.0.0-M5</apache.maven.surefire.version>
         <apache.maven.failsafe.version>3.0.0-M5</apache.maven.failsafe.version>
+        <build-helper.version>3.2.0</build-helper.version>
+        <apache.maven.site.version>3.9.1</apache.maven.site.version>
+        <apache.maven.ant.run.version>3.0.0</apache.maven.ant.run.version>
+        <apache.maven.jxr.version>3.1.1</apache.maven.jxr.version>
         <junit.version>5.8.1</junit.version>
+        <jacoco.version>0.8.7</jacoco.version>
     </properties>
 
     <dependencyManagement>
@@ -65,13 +71,146 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-plugin</artifactId>
                     <version>${apache.maven.surefire.version}</version>
+                    <configuration>
+                        <statelessTestsetReporter
+                                implementation="org.apache.maven.plugin.surefire.extensions.junit5.JUnit5Xml30StatelessReporter">
+                            <disable>false</disable>
+                            <version>3.0</version>
+                            <usePhrasedFileName>false</usePhrasedFileName>
+                            <!--                            <usePhrasedTestSuiteClassName>true</usePhrasedTestSuiteClassName>-->
+                            <!--                            <usePhrasedTestCaseClassName>true</usePhrasedTestCaseClassName>-->
+                            <usePhrasedTestCaseMethodName>true</usePhrasedTestCaseMethodName>
+                        </statelessTestsetReporter>
+                        <consoleOutputReporter
+                                implementation="org.apache.maven.plugin.surefire.extensions.junit5.JUnit5ConsoleOutputReporter">
+                            <disable>false</disable>
+                            <encoding>UTF-8</encoding>
+                            <usePhrasedFileName>false</usePhrasedFileName>
+                        </consoleOutputReporter>
+                        <statelessTestsetInfoReporter
+                                implementation="org.apache.maven.plugin.surefire.extensions.junit5.JUnit5StatelessTestsetInfoReporter">
+                            <disable>false</disable>
+                            <usePhrasedFileName>false</usePhrasedFileName>
+                            <usePhrasedClassNameInRunning>true</usePhrasedClassNameInRunning>
+                            <usePhrasedClassNameInTestCaseSummary>true</usePhrasedClassNameInTestCaseSummary>
+                        </statelessTestsetInfoReporter>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>build-helper-maven-plugin</artifactId>
+                    <version>${build-helper.version}</version>
+                    <executions>
+                        <execution>
+                            <phase>test</phase>
+                            <goals>
+                                <goal>add-test-source</goal>
+                            </goals>
+                            <configuration>
+                                <sources>
+                                    <source>${project.basedir}/src/test</source>
+                                </sources>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-report-plugin</artifactId>
+                    <version>${apache.maven.surefire.version}</version>
+                    <executions>
+                        <execution>
+                            <phase>test</phase>
+                            <goals>
+                                <goal>report</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-jxr-plugin</artifactId>
+                    <version>${apache.maven.jxr.version}</version>
+                    <executions>
+                        <execution>
+                            <phase>test</phase>
+                            <goals>
+                                <goal>jxr</goal>
+                                <goal>aggregate</goal>
+                                <goal>test-jxr</goal>
+                                <goal>test-aggregate</goal>
+                            </goals>
+                        </execution>
+                    </executions>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-failsafe-plugin</artifactId>
                     <version>${apache.maven.failsafe.version}</version>
                 </plugin>
+                <plugin>
+                    <groupId>org.jacoco</groupId>
+                    <artifactId>jacoco-maven-plugin</artifactId>
+                    <version>${jacoco.version}</version>
+                    <executions>
+                        <execution>
+                            <id>prepare-agent</id>
+                            <goals>
+                                <goal>prepare-agent</goal>
+                            </goals>
+                        </execution>
+                        <execution>
+                            <id>report</id>
+                            <phase>test</phase>
+                            <goals>
+                                <goal>report</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-site-plugin</artifactId>
+                    <version>${apache.maven.site.version}</version>
+                    <configuration>
+                        <generateProjectInfo>false</generateProjectInfo>
+                        <generateReports>false</generateReports>
+                        <locales>zh_CN</locales>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <id>site</id>
+                            <phase>test-compile</phase>
+                            <goals>
+                                <goal>site</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
             </plugins>
         </pluginManagement>
+
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>${apache.maven.ant.run.version}</version>
+                <inherited>false</inherited>
+                <executions>
+                    <execution>
+                        <configuration>
+                            <target>
+                                <delete dir="${project.basedir}/target"/>
+                            </target>
+                        </configuration>
+                        <id>test</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
     </build>
 </project>
