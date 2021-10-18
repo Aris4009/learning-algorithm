@@ -22,7 +22,6 @@
         <apache.maven.version>3.8.1</apache.maven.version>
         <apache.maven.surefire.version>3.0.0-M5</apache.maven.surefire.version>
         <apache.maven.failsafe.version>3.0.0-M5</apache.maven.failsafe.version>
-        <apache.maven.site.version>3.9.1</apache.maven.site.version>
         <apache.maven.ant.run.version>3.0.0</apache.maven.ant.run.version>
         <apache.maven.jxr.version>3.1.1</apache.maven.jxr.version>
         <junit.version>5.8.1</junit.version>
@@ -117,8 +116,8 @@
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-site-plugin</artifactId>
-                    <version>${apache.maven.site.version}</version>
+                    <artifactId>maven-antrun-plugin</artifactId>
+                    <version>${apache.maven.ant.run.version}</version>
                 </plugin>
             </plugins>
         </pluginManagement>

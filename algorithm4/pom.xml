@@ -88,18 +88,19 @@
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-site-plugin</artifactId>
+                <artifactId>maven-antrun-plugin</artifactId>
                 <executions>
                     <execution>
-                        <configuration>
-                            <generateProjectInfo>false</generateProjectInfo>
-                            <generateReports>false</generateReports>
-                            <locales>zh_CN</locales>
-                        </configuration>
-                        <id>site</id>
                         <phase>test</phase>
+                        <configuration>
+                            <target>
+                                <copy todir="${project.basedir}/target/site">
+                                    <fileset dir="${project.basedir}/src/test/resources/site"/>
+                                </copy>
+                            </target>
+                        </configuration>
                         <goals>
-                            <goal>site</goal>
+                            <goal>run</goal>
                         </goals>
                     </execution>
                 </executions>
