@@ -1,7 +1,10 @@
 package cn.my.chapter_1.bag;
 
 import java.lang.reflect.Array;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,45 +17,6 @@ import org.slf4j.LoggerFactory;
 public class MyBag {
 
 	private static final Logger log = LoggerFactory.getLogger(MyBag.class);
-
-	public static void main(String[] args) {
-		testMyBagArray();
-		testMyBagList();
-	}
-
-	private static void testMyBagArray() {
-		MyBagArray<String> myBag = new MyBagArray<>();
-		log.info("myBag size {}", myBag.size());
-		for (int i = 0; i < 20; i++) {
-			myBag.add(String.valueOf(i));
-		}
-		log.info("myBag size {},elements[{}]", myBag.size(), myBag);
-		log.info("myBag contain 5? {}", myBag.contains("5"));
-
-		List<String> list = new ArrayList<>();
-		for (int i = 0; i < 3; i++) {
-			list.add(String.valueOf(i));
-		}
-		myBag.addAll(list);
-		log.info("myBag size {},elements[{}]", myBag.size(), myBag);
-	}
-
-	private static void testMyBagList() {
-		MyBagList<String> myBag = new MyBagList<>();
-		log.info("myBag size {}", myBag.size());
-		for (int i = 0; i < 20; i++) {
-			myBag.add(String.valueOf(i));
-		}
-		log.info("myBag size {},elements[{}]", myBag.size(), myBag);
-		log.info("myBag contain 5? {}", myBag.contains("5"));
-
-		List<String> list = new ArrayList<>();
-		for (int i = 0; i < 3; i++) {
-			list.add(String.valueOf(i));
-		}
-		myBag.addAll(list);
-		log.info("myBag size {},elements[{}]", myBag.size(), myBag);
-	}
 
 	/**
 	 * 背包的数组实现
