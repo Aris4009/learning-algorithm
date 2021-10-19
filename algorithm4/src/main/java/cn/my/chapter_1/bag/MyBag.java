@@ -6,9 +6,6 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 /**
  * 实现背包功能
  * <p>
@@ -16,7 +13,8 @@ import org.slf4j.LoggerFactory;
  */
 public class MyBag {
 
-	private static final Logger log = LoggerFactory.getLogger(MyBag.class);
+	private MyBag() {
+	}
 
 	/**
 	 * 背包的数组实现
@@ -31,7 +29,7 @@ public class MyBag {
 		// 默认数组元素的大小
 		private static final int DEFAULT_SIZE = 16;
 
-		// 背包元素大小
+		// 背包大小
 		private int size = 0;
 
 		// 默认集合
@@ -59,16 +57,15 @@ public class MyBag {
 
 		@Override
 		public boolean contains(Object o) {
-			Iterator<E> iterator = iterator();
 			if (o == null) {
-				while (iterator.hasNext()) {
-					if (iterator.next() == null) {
+				for (E e : this) {
+					if (e == null) {
 						return true;
 					}
 				}
 			} else {
-				while (iterator.hasNext()) {
-					if (o.equals(iterator.next())) {
+				for (E e : this) {
+					if (o.equals(e)) {
 						return true;
 					}
 				}
@@ -109,6 +106,9 @@ public class MyBag {
 		@Override
 		@SuppressWarnings("unchecked")
 		public <T> T[] toArray(T[] a) {
+			if (a == null) {
+				throw new IllegalArgumentException();
+			}
 			if (a.length < size) {
 				return (T[]) Arrays.copyOf(array, size, a.getClass());
 			}
@@ -119,7 +119,7 @@ public class MyBag {
 		@Override
 		public boolean add(E e) {
 			int l = array.length;
-			if (l == Integer.MAX_VALUE) {
+			if (size == Integer.MAX_VALUE) {
 				throw new ArrayIndexOutOfBoundsException();
 			}
 			if (size == l) {
@@ -212,9 +212,9 @@ public class MyBag {
 		// 链表节点对象
 		static class Node<E> {
 
-			private E e;
+			private final E e;
 
-			private Node<E> pre;
+			private final Node<E> pre;
 
 			private Node<E> next;
 
@@ -237,16 +237,15 @@ public class MyBag {
 
 		@Override
 		public boolean contains(Object o) {
-			Iterator<E> iterator = iterator();
 			if (o == null) {
-				while (iterator.hasNext()) {
-					if (iterator.next() == null) {
+				for (E e : this) {
+					if (e == null) {
 						return true;
 					}
 				}
 			} else {
-				while (iterator.hasNext()) {
-					if (o.equals(iterator.next())) {
+				for (E e : this) {
+					if (o.equals(e)) {
 						return true;
 					}
 				}
