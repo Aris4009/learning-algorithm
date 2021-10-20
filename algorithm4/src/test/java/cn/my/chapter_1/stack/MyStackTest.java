@@ -279,6 +279,10 @@ public class MyStackTest {
 			Assertions.assertEquals(100, stack1.size());
 			stack1.clear();
 			Assertions.assertEquals(0, stack1.size());
+			for (int i = 0; i < 100; i++) {
+				stack1.add(String.valueOf(i));
+			}
+			Assertions.assertEquals(100, stack1.size());
 		}
 	}
 }

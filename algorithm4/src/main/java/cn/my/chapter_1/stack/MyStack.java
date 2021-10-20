@@ -245,9 +245,6 @@ public class MyStack {
 		// 头结点
 		private Node<E> head;
 
-		// 尾结点
-		private Node<E> tail;
-
 		// 栈容量
 		private int size = 0;
 
@@ -256,7 +253,7 @@ public class MyStack {
 		 * 
 		 * @param <E>
 		 */
-		class Node<E> {
+		private static class Node<E> {
 
 			private Node<E> pre;
 
@@ -278,9 +275,7 @@ public class MyStack {
 		 */
 		class It<E> implements Iterator<E> {
 
-			private MyStackList<E>.Node<E> h = (MyStackList<E>.Node<E>) head;
-
-			private MyStackList<E>.Node<E> t = (MyStackList<E>.Node<E>) tail;
+			private Node<E> h = (Node<E>) head;
 
 			@Override
 			public boolean hasNext() {
@@ -297,30 +292,22 @@ public class MyStack {
 				return e;
 			}
 
-			public boolean hasPre() {
-				return t != null;
-			}
-
-			public E pre() {
-				if (t == null) {
-					throw new NoSuchElementException();
-				}
-				E e = t.e;
-				t = t.pre;
-				return e;
-			}
-
 			@Override
 			public void remove() {
 				if (hasNext()) {
-					MyStackList<E>.Node<E> node = h;
-					h = h.next;
+					Node<E> node = h;
+					Node<E> pre = h.pre;
+					Node<E> next = h.next;
+					if (pre != null) {
+						pre.next = next;
+					}
+					if (next != null) {
+						next.pre = pre;
+					}
+					h = next;
 					node.pre = null;
 					node.next = null;
 					node.e = null;
-					if (h != null) {
-						h.pre = null;
-					}
 					size = size - 1;
 				}
 			}
@@ -335,12 +322,11 @@ public class MyStack {
 		public boolean push(E e) {
 			if (isEmpty()) {
 				head = new Node<>(null, null, e);
-				tail = head;
 			} else {
-				Node<E> t = tail;
-				Node<E> node = new Node<>(t, null, e);
-				t.next = node;
-				tail = node;
+				Node<E> h = head;
+				Node<E> node = new Node<>(null, h, e);
+				h.pre = node;
+				head = node;
 			}
 			size = size + 1;
 			return true;
@@ -354,12 +340,16 @@ public class MyStack {
 			if (isEmpty()) {
 				throw new NoSuchElementException();
 			}
-			Node<E> node = tail;
+			Node<E> node = head;
+			Node<E> next = head.next;
 			E e = node.e;
-			tail = tail.pre;
 			node.pre = null;
 			node.next = null;
 			node.e = null;
+			if (next != null) {
+				next.pre = null;
+			}
+			head = next;
 			size = size - 1;
 			return e;
 		}
@@ -401,10 +391,10 @@ public class MyStack {
 		public Object[] toArray() {
 			Object[] objects = new Object[size];
 			It<E> it = iterator();
-			int i = size;
+			int i = 0;
 			while (it.hasNext()) {
-				objects[i - 1] = it.next();
-				i = i - 1;
+				objects[i] = it.next();
+				i = i + 1;
 			}
 			return objects;
 		}
@@ -418,10 +408,10 @@ public class MyStack {
 			int n = Math.max(a.length, size);
 			T[] copy = ((Object) a.getClass() == (Object) Object[].class) ? (T[]) new Object[n]
 					: (T[]) Array.newInstance(a.getClass().getComponentType(), n);
-			int s = size;
+			int i = 0;
 			for (E e : this) {
-				copy[s - 1] = (T) e;
-				s = s - 1;
+				copy[i] = (T) e;
+				i = i + 1;
 			}
 			return copy;
 		}
@@ -438,6 +428,9 @@ public class MyStack {
 
 		@Override
 		public boolean containsAll(Collection<?> c) {
+			if (c == null) {
+				throw new InvalidParameterException();
+			}
 			for (Object o : c) {
 				if (!contains(o)) {
 					return false;
@@ -477,7 +470,7 @@ public class MyStack {
 			It<E> it = iterator();
 			StringBuilder builder = new StringBuilder();
 			while (it.hasNext()) {
-				builder.append(iterator().next().toString());
+				builder.append(it.next().toString());
 				builder.append(",");
 			}
 			builder.deleteCharAt(builder.length() - 1);
