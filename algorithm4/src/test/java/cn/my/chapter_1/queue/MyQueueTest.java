@@ -1,10 +1,7 @@
 package cn.my.chapter_1.queue;
 
 import java.security.InvalidParameterException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -134,16 +131,124 @@ public class MyQueueTest {
 	@Test
 	@DisplayName("清除队列中的所有元素")
 	void clear() {
-		for (int i = 0; i < 100; i++) {
+		for (int i = 0; i < 3; i++) {
 			queue.add(String.valueOf(i));
 		}
-		Assertions.assertEquals(100, queue.size());
+		Assertions.assertEquals(3, queue.size());
 		queue.clear();
 		Assertions.assertEquals(0, queue.size());
-		for (int i = 0; i < 100; i++) {
+		for (int i = 0; i < 3; i++) {
 			queue.add(String.valueOf(i));
 		}
-		Assertions.assertEquals(100, queue.size());
+		Assertions.assertEquals(3, queue.size());
 	}
 
+	@Test
+	@DisplayName("移除一个元素")
+	void remove() {
+		for (int i = 0; i < 5; i++) {
+			queue.enqueue(String.valueOf(i));
+		}
+		Assertions.assertEquals(5, queue.size());
+
+		// 移除中间结点
+		Assertions.assertTrue(queue.remove("3"));
+		Assertions.assertEquals(4, queue.size());
+		String str = "0,1,2,4";
+		Assertions.assertEquals(str, queue.toString());
+
+		Assertions.assertTrue(queue.add("5"));
+		Assertions.assertEquals(5, queue.size());
+		str = "0,1,2,4,5";
+		Assertions.assertEquals(str, queue.toString());
+
+		// 移除头结点
+		Assertions.assertTrue(queue.remove("0"));
+		Assertions.assertEquals(4, queue.size());
+		str = "1,2,4,5";
+		Assertions.assertEquals(str, queue.toString());
+
+		// 移除尾结点
+		queue.enqueue("6");
+		queue.remove("6");
+		str = "1,2,4,5";
+		Assertions.assertEquals(str, queue.toString());
+
+		// 从头部遍历移除结点
+		ListIterator<String> listIterator = queue.iterator();
+		while (listIterator.hasNext()) {
+			String s = listIterator.next();
+			// 移除头结点
+			if (s.equals("1")) {
+				listIterator.remove();
+			}
+		}
+		str = "2,4,5";
+		Assertions.assertEquals(str, queue.toString());
+
+		listIterator = queue.iterator();
+		while (listIterator.hasNext()) {
+			String s = listIterator.next();
+			// 移除中间结点
+			if (s.equals("4")) {
+				listIterator.remove();
+			}
+		}
+		str = "2,5";
+		Assertions.assertEquals(str, queue.toString());
+
+		listIterator = queue.iterator();
+		while (listIterator.hasNext()) {
+			String s = listIterator.next();
+			// 移除尾结点
+			if (s.equals("5")) {
+				listIterator.remove();
+			}
+		}
+		str = "2";
+		Assertions.assertEquals(str, queue.toString());
+
+		// 从尾部遍历结点
+		queue.enqueue("6");
+		queue.enqueue("7");
+		listIterator = queue.iterator();
+		while (listIterator.hasPrevious()) {
+			String s = listIterator.previous();
+			// 移除尾结点
+			if (s.equals("7")) {
+				listIterator.remove();
+			}
+		}
+		str = "2,6";
+		Assertions.assertEquals(str, queue.toString());
+		queue.add("7");
+
+		// 从中间移除结点
+		listIterator = queue.iterator();
+		while (listIterator.hasPrevious()) {
+			String s = listIterator.previous();
+			if (s.equals("6")) {
+				listIterator.remove();
+			}
+		}
+		str = "2,7";
+		Assertions.assertEquals(str, queue.toString());
+
+		// 移除头结点
+		listIterator = queue.iterator();
+		while (listIterator.hasPrevious()) {
+			String s = listIterator.previous();
+			if (s.equals("2")) {
+				listIterator.remove();
+			}
+		}
+		str = "7";
+		Assertions.assertEquals(str, queue.toString());
+
+		queue.add("8");
+		queue.add("9");
+		Assertions.assertEquals(3, queue.size());
+		str = "7,8,9";
+		Assertions.assertEquals(str, queue.toString());
+	}
 }

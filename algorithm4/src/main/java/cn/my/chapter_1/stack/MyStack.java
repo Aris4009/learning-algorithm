@@ -271,11 +271,12 @@ public class MyStack {
 		/**
 		 * 迭代器
 		 * 
-		 * @param <E>
 		 */
-		class It<E> implements Iterator<E> {
+		class It implements Iterator<E> {
 
-			private Node<E> h = (Node<E>) head;
+			private Node<E> h = head;
+
+			private Node<E> cursor;
 
 			@Override
 			public boolean hasNext() {
@@ -287,29 +288,35 @@ public class MyStack {
 				if (h == null) {
 					throw new NoSuchElementException();
 				}
-				E e = h.e;
+				cursor = h;
 				h = h.next;
-				return e;
+				return cursor.e;
 			}
 
 			@Override
 			public void remove() {
-				if (hasNext()) {
-					Node<E> node = h;
-					Node<E> pre = h.pre;
-					Node<E> next = h.next;
-					if (pre != null) {
-						pre.next = next;
+				if (cursor == null) {
+					throw new NoSuchElementException();
+				}
+				Node<E> pre = cursor.pre;
+				Node<E> next = cursor.next;
+				// 如果删除的是头结点
+				if (pre == null) {
+					head = next;
+					if (next != null) {
+						next.pre = null;
 					}
+				} else {
+					pre.next = next;
 					if (next != null) {
 						next.pre = pre;
 					}
-					h = next;
-					node.pre = null;
-					node.next = null;
-					node.e = null;
-					size = size - 1;
 				}
+				cursor.pre = null;
+				cursor.next = null;
+				cursor.e = null;
+				cursor = null;
+				size = size - 1;
 			}
 		}
 
@@ -383,14 +390,14 @@ public class MyStack {
 		}
 
 		@Override
-		public It<E> iterator() {
-			return new It<>();
+		public Iterator<E> iterator() {
+			return new It();
 		}
 
 		@Override
 		public Object[] toArray() {
 			Object[] objects = new Object[size];
-			It<E> it = iterator();
+			Iterator<E> it = iterator();
 			int i = 0;
 			while (it.hasNext()) {
 				objects[i] = it.next();
@@ -459,15 +466,16 @@ public class MyStack {
 
 		@Override
 		public void clear() {
-			It<E> it = iterator();
+			Iterator<E> it = iterator();
 			while (it.hasNext()) {
+				it.next();
 				it.remove();
 			}
 		}
 
 		@Override
 		public String toString() {
-			It<E> it = iterator();
+			Iterator<E> it = iterator();
 			StringBuilder builder = new StringBuilder();
 			while (it.hasNext()) {
 				builder.append(it.next().toString());

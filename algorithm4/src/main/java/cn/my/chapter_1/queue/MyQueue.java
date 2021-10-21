@@ -2,10 +2,7 @@ package cn.my.chapter_1.queue;
 
 import java.lang.reflect.Array;
 import java.security.InvalidParameterException;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.NoSuchElementException;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * 使用链表实现队列
@@ -47,9 +44,13 @@ public class MyQueue<E> implements Collection<E> {
 	 * 链表迭代器
 	 *
 	 */
-	class It<E> implements Iterator<E> {
+	class It implements ListIterator<E> {
 
-		private Node<E> h = (Node<E>) head;
+		private Node<E> h = head;
+
+		private Node<E> t = tail;
+
+		private Node<E> cursor;
 
 		@Override
 		public boolean hasNext() {
@@ -58,31 +59,80 @@ public class MyQueue<E> implements Collection<E> {
 
 		@Override
 		public E next() {
-			if (isEmpty()) {
+			if (!hasNext()) {
 				throw new NoSuchElementException();
 			}
-			Node<E> node = h;
-			E e = node.e;
+			cursor = h;
 			h = h.next;
-			return e;
+			return cursor.e;
+		}
+
+		@Override
+		public boolean hasPrevious() {
+			return t != null;
+		}
+
+		@Override
+		public E previous() {
+			if (!hasPrevious()) {
+				throw new NoSuchElementException();
+			}
+			cursor = t;
+			t = t.pre;
+			return cursor.e;
+		}
+
+		@Override
+		public int nextIndex() {
+			throw new UnsupportedOperationException();
+		}
+
+		@Override
+		public int previousIndex() {
+			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public void remove() {
-			Node<E> node = h;
-			Node<E> pre = node.pre;
-			Node<E> next = node.next;
-			if (pre != null) {
-				pre.next = next;
+			if (cursor == null) {
+				throw new NoSuchElementException();
 			}
-			if (next != null) {
+			Node<E> pre = cursor.pre;
+			Node<E> next = cursor.next;
+			// 删除头结点、尾结点、中间节点
+			if (cursor == head) {
+				head = next;
+				if (next != null) {
+					next.pre = null;
+				} else {
+					tail = null;
+				}
+			} else if (cursor == tail) {
+				tail = pre;
+				if (pre != null) {
+					pre.next = null;
+				} else {
+					head = null;
+				}
+			} else {
+				pre.next = next;
 				next.pre = pre;
 			}
-			h = next;
-			node.pre = null;
-			node.next = null;
-			node.e = null;
+			cursor.pre = null;
+			cursor.next = null;
+			cursor.e = null;
+			cursor = null;
 			size = size - 1;
+		}
+
+		@Override
+		public void set(E e) {
+			throw new UnsupportedOperationException();
+		}
+
+		@Override
+		public void add(E e) {
+			throw new UnsupportedOperationException();
 		}
 	}
 
@@ -155,8 +205,8 @@ public class MyQueue<E> implements Collection<E> {
 	}
 
 	@Override
-	public It<E> iterator() {
-		return new It<>();
+	public ListIterator<E> iterator() {
+		return new It();
 	}
 
 	@Override
@@ -239,6 +289,7 @@ public class MyQueue<E> implements Collection<E> {
 	public void clear() {
 		Iterator<E> iterator = iterator();
 		while (iterator.hasNext()) {
+			iterator.next();
 			iterator.remove();
 		}
 	}
