@@ -605,5 +605,80 @@ public class MyStackTest {
 				return stack1.toString();
 			}
 		}
+
+		@Nested
+		@DisplayName("将中序表达式转换为后序表达式，即逆波兰表示法")
+		class ReversePolishNotation {
+
+			// 操作数
+			private MyStack.MyStackArray<String> stack1;
+
+			// 操作符
+			private MyStack.MyStackArray<String> stack2;
+
+			@BeforeEach
+			void init() {
+				stack1 = new MyStack.MyStackArray<>();
+				stack2 = new MyStack.MyStackArray<>();
+			}
+
+			@Test
+			void test1() {
+				String a = "( 2 + ( ( 3 + 4 ) * ( 5 * 6 ) ) )";
+				String a1 = "2 3 4 + 5 6 * * + ";
+				Assertions.assertEquals(a1, cover(a));
+			}
+
+			@Test
+			void test2() {
+				String b = "( ( ( 5 + ( 7 * ( 1 + 1 ) ) ) * 3 ) + ( 2 * ( 1 + 1 ) ) )";
+				String b1 = "5 7 1 1 + * + 3 * 2 1 1 + * + ";
+				Assertions.assertEquals(b1, cover(b));
+			}
+
+			void test3() {
+				String c = "5 7 1 1 + * + 3 * 2 1 1 + * + ";
+				String c1 = "212";
+			}
+
+			/**
+			 * 将中序表达式转换为逆波兰表示法
+			 * 
+			 * @param a
+			 */
+			private String cover(String a) {
+				if (StrUtil.isEmpty(a)) {
+					return null;
+				}
+				String[] array = a.split(" ");
+				for (String s : array) {
+					if (isOp(s)) {
+						stack2.push(s);
+					} else if ("(".equals(s)) {
+
+					} else if (!")".equals(s)) {
+						stack1.push(s);
+					} else {
+						String n = "";
+						while (!stack1.isEmpty()) {
+							n = stack1.pop() + " " + n;
+						}
+						if (!stack2.isEmpty()) {
+							if (!n.endsWith(" ")) {
+								n = n + " " + stack2.pop();
+							} else {
+								n = n + stack2.pop();
+							}
+						}
+						stack1.push(n);
+					}
+				}
+				return stack1.toString() + " ";
+			}
+
+			private boolean isOp(String a) {
+				return "+".equals(a) || "-".equals(a) || "*".equals(a) || "/".equals(a);
+			}
+		}
 	}
 }
