@@ -1,12 +1,11 @@
 package cn.my.chapter_1.stack;
 
 import java.security.InvalidParameterException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 import org.junit.jupiter.api.*;
+
+import cn.hutool.core.util.StrUtil;
 
 @DisplayName("测试栈用例")
 public class MyStackTest {
@@ -150,6 +149,24 @@ public class MyStackTest {
 			stack1.clear();
 			Assertions.assertEquals(0, stack1.size());
 		}
+
+		@Test
+		@DisplayName("1.3.2-给定以下输入，java Stack 的输出是什么？it was - the best - of times - - - it was - the - -")
+		void print() {
+			MyStack.MyStackArray<String> my = new MyStack.MyStackArray<>();
+			String[] str = "it was - the best - of times - - - it was - the - -".split("\\s");
+			StringBuilder builder = new StringBuilder();
+			for (String s : str) {
+				if (!s.equals("-")) {
+					my.push(s);
+				} else {
+					builder.append(my.pop());
+					builder.append(" ");
+				}
+			}
+			String s = "was best times of the was the it ";
+			Assertions.assertEquals(s, builder.toString());
+		}
 	}
 
 	@Nested
@@ -283,6 +300,81 @@ public class MyStackTest {
 				stack1.add(String.valueOf(i));
 			}
 			Assertions.assertEquals(100, stack1.size());
+		}
+
+		@Test
+		@DisplayName("1.3.2-给定以下输入，java Stack 的输出是什么？it was - the best - of times - - - it was - the - -")
+		void print() {
+			MyStack.MyStackList<String> my = new MyStack.MyStackList<>();
+			String[] str = "it was - the best - of times - - - it was - the - -".split("\\s");
+			StringBuilder builder = new StringBuilder();
+			for (String s : str) {
+				if (!s.equals("-")) {
+					my.push(s);
+				} else {
+					builder.append(my.pop());
+					builder.append(" ");
+				}
+			}
+			String s = "was best times of the was the it ";
+			Assertions.assertEquals(s, builder.toString());
+		}
+
+		@Nested
+		@DisplayName("编写一个 Stack 的用例 Parentheses，从标准输入中读取一个文本流并使用栈判定其中的括\n"
+				+ "号是否配对完整。例如，对于 [()]{}{[()()]()} 程序应该打印 true，对于 [(]) 则打印\n" + "false。")
+		class Parentheses {
+
+			MyStack.MyStackList<String> myStackList;
+
+			@BeforeEach
+			void init() {
+				myStackList = new MyStack.MyStackList<>();
+			}
+
+			@Test
+			@DisplayName("[()]{}{[()()]()} 程序应该打印 true")
+			void test1() {
+				String a = "[()]{}{[()()]()}";
+				Assertions.assertFalse(test(a));
+			}
+
+			@Test
+			@DisplayName("[(]) 则打印false。")
+			void test2() {
+				String a = "[(])";
+				Assertions.assertFalse(test(a));
+			}
+
+			private boolean test(String a) {
+				if (Objects.isNull(a) || a.isEmpty()) {
+					return false;
+				}
+				for (int i = 0; i < a.length(); i++) {
+					String t = String.valueOf(a.charAt(i));
+					if (match(a, "(", ")", myStackList)) {
+						continue;
+					}
+					if (match(a, "[", "]", myStackList)) {
+						continue;
+					}
+					if (match(a, "{", "}", myStackList)) {
+						continue;
+					}
+					if (t.equals("[") || t.equals("{") || t.equals("(")) {
+						myStackList.push(t);
+					}
+				}
+				return myStackList.isEmpty();
+			}
+
+			private boolean isSign(String a, String sign) {
+				return StrUtil.equals(a, sign);
+			}
+
+			private boolean match(String a, String left, String right, MyStack.MyStackList<String> stack) {
+				return isSign(a, right) && !myStackList.isEmpty() && isSign(myStackList.pop(), left);
+			}
 		}
 	}
 }
