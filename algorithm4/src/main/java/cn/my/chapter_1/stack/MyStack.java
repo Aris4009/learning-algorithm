@@ -233,6 +233,14 @@ public class MyStack {
 			builder.deleteCharAt(builder.length() - 1);
 			return builder.toString();
 		}
+
+		@SuppressWarnings("unchecked")
+		public E peek() {
+			if (isEmpty()) {
+				throw new NoSuchElementException();
+			}
+			return (E) array[size - 1];
+		}
 	}
 
 	/**
@@ -483,6 +491,13 @@ public class MyStack {
 			}
 			builder.deleteCharAt(builder.length() - 1);
 			return builder.toString();
+		}
+
+		public E peek() {
+			if (isEmpty()) {
+				throw new NoSuchElementException();
+			}
+			return head.e;
 		}
 	}
 }

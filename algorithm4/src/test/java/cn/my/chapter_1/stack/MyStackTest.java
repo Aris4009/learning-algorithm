@@ -168,6 +168,121 @@ public class MyStackTest {
 			String s = "was best times of the was the it ";
 			Assertions.assertEquals(s, builder.toString());
 		}
+
+		@Nested
+		@DisplayName("编写一个 Stack 的用例 Parentheses，从标准输入中读取一个文本流并使用栈判定其中的括\n"
+				+ "号是否配对完整。例如，对于 [()]{}{[()()]()} 程序应该打印 true，对于 [(]) 则打印\n" + "false。")
+		class Parentheses {
+
+			MyStack.MyStackArray<String> myStackList;
+
+			@BeforeEach
+			void init() {
+				myStackList = new MyStack.MyStackArray<>();
+			}
+
+			@Test
+			@DisplayName("[()]{}{[()()]()} 程序应该打印 true")
+			void test1() {
+				String a = "[()]{}{[()()]()}";
+				Assertions.assertFalse(test(a));
+			}
+
+			@Test
+			@DisplayName("[(]) 则打印false。")
+			void test2() {
+				String a = "[(])";
+				Assertions.assertFalse(test(a));
+			}
+
+			private boolean test(String a) {
+				if (Objects.isNull(a) || a.isEmpty()) {
+					return false;
+				}
+				for (int i = 0; i < a.length(); i++) {
+					String t = String.valueOf(a.charAt(i));
+					if (match(a, "(", ")", myStackList)) {
+						continue;
+					}
+					if (match(a, "[", "]", myStackList)) {
+						continue;
+					}
+					if (match(a, "{", "}", myStackList)) {
+						continue;
+					}
+					if (t.equals("[") || t.equals("{") || t.equals("(")) {
+						myStackList.push(t);
+					}
+				}
+				return myStackList.isEmpty();
+			}
+
+			private boolean isSign(String a, String sign) {
+				return StrUtil.equals(a, sign);
+			}
+
+			private boolean match(String a, String left, String right, MyStack.MyStackArray<String> stack) {
+				return isSign(a, right) && !myStackList.isEmpty() && isSign(myStackList.pop(), left);
+			}
+		}
+
+		@Nested
+		@DisplayName("十进制转二进制")
+		class NumberToBinary {
+
+			@Test
+			@DisplayName("输出50的二进制格式")
+			void test() {
+				MyStack.MyStackList<Integer> myStackList = new MyStack.MyStackList<>();
+				int n = 50;
+				while (n > 0) {
+					myStackList.push(n % 2);
+					n = n / 2;
+				}
+				String a = "110010";
+				StringBuilder builder = new StringBuilder();
+				for (Integer integer : myStackList) {
+					builder.append(integer.toString());
+				}
+				Assertions.assertEquals(a, builder.toString());
+			}
+		}
+
+		@Nested
+		@DisplayName("使用栈逆序队列操作")
+		class ReverseQueue {
+
+			@Test
+			@DisplayName("将队列1，2，3，4，5逆序为5，4，3，2，1")
+			void test() {
+				MyQueue<Integer> queue = new MyQueue<>();
+				for (int i = 1; i <= 5; i++) {
+					queue.enqueue(i);
+				}
+
+				MyStack.MyStackList<Integer> stack = new MyStack.MyStackList<>();
+				while (!queue.isEmpty()) {
+					stack.push(queue.dequeue());
+				}
+
+				while (!stack.isEmpty()) {
+					queue.enqueue(stack.pop());
+				}
+
+				String a = "5,4,3,2,1";
+				Assertions.assertEquals(a, queue.toString());
+			}
+		}
+
+		@Test
+		@DisplayName("返回栈中最近添加的元素，而不弹出")
+		void peek() {
+			stack1.push("1");
+			stack1.push("2");
+			Assertions.assertEquals("2", stack1.peek());
+			stack1.push("3");
+			Assertions.assertEquals("3", stack1.peek());
+		}
 	}
 
 	@Nested
@@ -423,6 +538,71 @@ public class MyStackTest {
 
 				String a = "5,4,3,2,1";
 				Assertions.assertEquals(a, queue.toString());
+			}
+		}
+
+		@Test
+		@DisplayName("返回栈中最近添加的元素，而不弹出")
+		void peek() {
+			stack1.push("1");
+			stack1.push("2");
+			Assertions.assertEquals("2", stack1.peek());
+			stack1.push("3");
+			Assertions.assertEquals("3", stack1.peek());
+		}
+
+		@Nested
+		@DisplayName("编写一段程序，从标准输入得到一个缺少左括号的表达式并打印出补全括号之后的中序表达式。\n" + "例如，给定输入：\n"
+				+ "1 + 2 ) * 3 - 4 ) * 5 - 6 ) ) ) \n" + "你的程序应该输出：\n" + "( ( 1 + 2 ) * ( ( 3 - 4 ) * ( 5 - 6 ) ) )")
+		class fillParentheses {
+
+			// 保存操作数
+			private MyStack.MyStackList<String> stack1;
+
+			// 保存运算符
+			private MyStack.MyStackList<String> stack2;
+
+			@BeforeEach
+			void init() {
+				stack1 = new MyStack.MyStackList<>();
+				stack2 = new MyStack.MyStackList<>();
+			}
+
+			@Test
+			@DisplayName("测试")
+			void test() {
+				String a = "1 + 2 ) * 3 - 4 ) * 5 - 6 ) ) ) ";
+				String b = "( ( 1 + 2 ) * ( ( 3 - 4 ) * ( 5 - 6 ) ) )";
+				Assertions.assertEquals(b, print(a));
+			}
+
+			private String print(String a) {
+				if (Objects.isNull(a) || a.isEmpty()) {
+					return null;
+				}
+				String[] arr = a.split("\\s");
+				for (String s : arr) {
+					if ("+".equals(s) || "-".equals(s) || "*".equals(s) || "/".equals(s)) {
+						stack2.push(s);
+					} else if (!")".equals(s)) {
+						stack1.push(s);
+					} else {
+						String t1 = "";
+						String t2 = "";
+						String op = "";
+						if (!stack1.isEmpty()) {
+							t1 = stack1.pop();
+						}
+						if (!stack2.isEmpty()) {
+							op = stack2.pop();
+						}
+						if (!stack1.isEmpty()) {
+							t2 = stack1.pop();
+						}
+						stack1.push("( " + t2 + " " + op + " " + t1 + " )");
+					}
+				}
+				return stack1.toString();
 			}
 		}
 	}
