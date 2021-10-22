@@ -6,6 +6,7 @@ import java.util.*;
 import org.junit.jupiter.api.*;
 
 import cn.hutool.core.util.StrUtil;
+import cn.my.chapter_1.queue.MyQueue;
 
 @DisplayName("测试栈用例")
 public class MyStackTest {
@@ -374,6 +375,54 @@ public class MyStackTest {
 
 			private boolean match(String a, String left, String right, MyStack.MyStackList<String> stack) {
 				return isSign(a, right) && !myStackList.isEmpty() && isSign(myStackList.pop(), left);
+			}
+		}
+
+		@Nested
+		@DisplayName("十进制转二进制")
+		class NumberToBinary {
+
+			@Test
+			@DisplayName("输出50的二进制格式")
+			void test() {
+				MyStack.MyStackList<Integer> myStackList = new MyStack.MyStackList<>();
+				int n = 50;
+				while (n > 0) {
+					myStackList.push(n % 2);
+					n = n / 2;
+				}
+				String a = "110010";
+				StringBuilder builder = new StringBuilder();
+				for (Integer integer : myStackList) {
+					builder.append(integer.toString());
+				}
+				Assertions.assertEquals(a, builder.toString());
+			}
+		}
+
+		@Nested
+		@DisplayName("使用栈逆序队列操作")
+		class ReverseQueue {
+
+			@Test
+			@DisplayName("将队列1，2，3，4，5逆序为5，4，3，2，1")
+			void test() {
+				MyQueue<Integer> queue = new MyQueue<>();
+				for (int i = 1; i <= 5; i++) {
+					queue.enqueue(i);
+				}
+
+				MyStack.MyStackList<Integer> stack = new MyStack.MyStackList<>();
+				while (!queue.isEmpty()) {
+					stack.push(queue.dequeue());
+				}
+
+				while (!stack.isEmpty()) {
+					queue.enqueue(stack.pop());
+				}
+
+				String a = "5,4,3,2,1";
+				Assertions.assertEquals(a, queue.toString());
 			}
 		}
 	}
