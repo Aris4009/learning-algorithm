@@ -636,14 +636,21 @@ public class MyStackTest {
 				Assertions.assertEquals(b1, cover(b));
 			}
 
+			@Test
 			void test3() {
-				String c = "5 7 1 1 + * + 3 * 2 1 1 + * + ";
-				String c1 = "212";
+				Map<String, String> map = new HashMap<>();
+				map.put("3 4 5 + * ", "27");
+				map.put("1 2 3 4 5 * + 6 * * +", "277");
+				map.put("7 16 16 16 * * * 5 16 16 * * 3 16 * 1 + + +", "30001");
+				map.put("7 16 * 5 + 16 * 3 + 16 * 1 +", "30001");
+				map.forEach((k, v) -> {
+					Assertions.assertEquals(cal(k), v);
+				});
 			}
 
 			/**
 			 * 将中序表达式转换为逆波兰表示法
-			 * 
+			 *
 			 * @param a
 			 */
 			private String cover(String a) {
@@ -678,6 +685,42 @@ public class MyStackTest {
 
 			private boolean isOp(String a) {
 				return "+".equals(a) || "-".equals(a) || "*".equals(a) || "/".equals(a);
+			}
+
+			/**
+			 * 计算逆波兰表达式
+			 *
+			 * @param a
+			 */
+			private String cal(String a) {
+				MyStack.MyStackArray<String> stack = new MyStack.MyStackArray<>();
+				if (StrUtil.isEmpty(a)) {
+					return null;
+				}
+				String[] array = a.split(" ");
+				for (String s : array) {
+					if (!isOp(s)) {
+						stack.push(s);
+					} else {
+						int m = 0, n = 0;
+						if (!stack.isEmpty()) {
+							m = Integer.parseInt(stack.pop());
+						}
+						if (!stack.isEmpty()) {
+							n = Integer.parseInt(stack.pop());
+						}
+						if ("+".equals(s)) {
+							stack.push(String.valueOf(n + m));
+						} else if ("-".equals(s)) {
+							stack.push(String.valueOf(n - m));
+						} else if ("*".equals(s)) {
+							stack.push(String.valueOf(n * m));
+						} else if ("/".equals(s)) {
+							stack.push(String.valueOf(n / m));
+						}
+					}
+				}
+				return stack.toString();
 			}
 		}
 	}
