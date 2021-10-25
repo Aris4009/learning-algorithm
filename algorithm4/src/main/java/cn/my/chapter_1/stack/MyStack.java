@@ -230,7 +230,9 @@ public class MyStack {
 				builder.append(iterator.next().toString());
 				builder.append(",");
 			}
-			builder.deleteCharAt(builder.length() - 1);
+			if (builder.length() > 0) {
+				builder.deleteCharAt(builder.length() - 1);
+			}
 			return builder.toString();
 		}
 
@@ -489,7 +491,9 @@ public class MyStack {
 				builder.append(it.next().toString());
 				builder.append(",");
 			}
-			builder.deleteCharAt(builder.length() - 1);
+			if (builder.length() > 0) {
+				builder.deleteCharAt(builder.length() - 1);
+			}
 			return builder.toString();
 		}
 

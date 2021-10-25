@@ -302,7 +302,9 @@ public class MyQueue<E> implements Collection<E> {
 			builder.append(it.next().toString());
 			builder.append(",");
 		}
-		builder.deleteCharAt(builder.length() - 1);
+		if (builder.length() > 0) {
+			builder.deleteCharAt(builder.length() - 1);
+		}
 		return builder.toString();
 	}
 }
