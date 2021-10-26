@@ -52,6 +52,8 @@ public class MyQueue<E> implements Collection<E> {
 
 		private Node<E> cursor;
 
+		private int nextIdx = 0;
+
 		@Override
 		public boolean hasNext() {
 			return h != null;
@@ -64,6 +66,7 @@ public class MyQueue<E> implements Collection<E> {
 			}
 			cursor = h;
 			h = h.next;
+			nextIdx = nextIdx + 1;
 			return cursor.e;
 		}
 
@@ -79,17 +82,24 @@ public class MyQueue<E> implements Collection<E> {
 			}
 			cursor = t;
 			t = t.pre;
+			nextIdx = nextIdx - 1;
 			return cursor.e;
 		}
 
 		@Override
 		public int nextIndex() {
-			throw new UnsupportedOperationException();
+			if (!hasNext()) {
+				return -1;
+			}
+			return nextIdx;
 		}
 
 		@Override
 		public int previousIndex() {
-			throw new UnsupportedOperationException();
+			if (!hasPrevious()) {
+				return -1;
+			}
+			return nextIdx - 1;
 		}
 
 		@Override
@@ -122,6 +132,7 @@ public class MyQueue<E> implements Collection<E> {
 			cursor.next = null;
 			cursor.e = null;
 			cursor = null;
+			nextIdx = nextIdx - 1;
 			size = size - 1;
 		}
 
