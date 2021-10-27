@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 /**
  * 链表的反转
  */
-public class ReverseList<E> {
+public class ReverseListTest<E> {
 
 	private Node<E> head;
 
@@ -128,7 +128,7 @@ public class ReverseList<E> {
 	}
 
 	private String t(int[] a) {
-		ReverseList<Integer> list = new ReverseList<>();
+		ReverseListTest<Integer> list = new ReverseListTest<>();
 		for (int j : a) {
 			list.add(j);
 		}

@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
  * 约瑟夫环的问题
  */
 @DisplayName("测试约瑟夫环")
-public class Josephus {
+public class JosephusTest {
 
 	// 原始数据队列
 	private MyQueue<Integer> myQueue;
