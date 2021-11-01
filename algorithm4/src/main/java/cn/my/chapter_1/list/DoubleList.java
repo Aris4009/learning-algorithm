@@ -165,6 +165,46 @@ public class DoubleList<E> {
 		return false;
 	}
 
+	public boolean remove(E e) {
+		if (e == null) {
+			throw new NoSuchElementException();
+		}
+		DoubleNode<E> cursor = head;
+		while (cursor != null) {
+			if (cursor.e.equals(e)) {
+				if (cursor == head) {
+					DoubleNode<E> next = cursor.next;
+					cursor.e = null;
+					cursor.next = null;
+					head = next;
+					if (head != null) {
+						head.pre = null;
+					}
+				} else if (cursor == last) {
+					DoubleNode<E> pre = cursor.pre;
+					cursor.e = null;
+					cursor.pre = null;
+					last = pre;
+					if (last != null) {
+						last.next = null;
+					}
+				} else {
+					DoubleNode<E> pre = cursor.pre;
+					DoubleNode<E> next = cursor.next;
+					pre.next = next;
+					next.pre = pre;
+					cursor.e = null;
+					cursor.pre = null;
+					cursor.next = null;
+				}
+				size = size - 1;
+				return true;
+			}
+			cursor = cursor.next;
+		}
+		return false;
+	}
+
 	public void clear() {
 		if (isEmpty()) {
 			return;
