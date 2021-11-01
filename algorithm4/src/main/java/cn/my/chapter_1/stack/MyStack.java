@@ -50,6 +50,18 @@ public class MyStack {
 			this.size = 0;
 		}
 
+		public MyStackArray(MyStackArray<E> q) {
+			if (q == null) {
+				throw new InvalidParameterException();
+			}
+			Iterator<E> iterator = q.reverseIterator();
+			array = new Object[q.size()];
+			while (iterator.hasNext()) {
+				array[size] = iterator.next();
+				size = size + 1;
+			}
+		}
+
 		@Override
 		public int size() {
 			return this.size;
@@ -138,6 +150,30 @@ public class MyStack {
 					}
 					E e = (E) array[cursor - 1];
 					cursor = cursor - 1;
+					return e;
+				}
+			};
+		}
+
+		// 逆序迭代器
+		public Iterator<E> reverseIterator() {
+			return new Iterator<E>() {
+
+				private int cursor = 0;
+
+				@Override
+				public boolean hasNext() {
+					return cursor < size;
+				}
+
+				@Override
+				@SuppressWarnings("unchecked")
+				public E next() {
+					if (cursor >= size) {
+						throw new NoSuchElementException();
+					}
+					E e = (E) array[cursor];
+					cursor = cursor + 1;
 					return e;
 				}
 			};
