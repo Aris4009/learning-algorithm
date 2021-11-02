@@ -2,10 +2,7 @@ package cn.my.chapter_1.stack;
 
 import java.lang.reflect.Array;
 import java.security.InvalidParameterException;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.NoSuchElementException;
+import java.util.*;
 
 /**
  * 实现一个后进先出的栈
@@ -28,6 +25,8 @@ public class MyStack {
 
 		// 默认栈的大小
 		private static final int DEFAULT_SIZE = 16;
+
+		protected transient int modCount;
 
 		/**
 		 * 默认构造器，初始化栈的容量为16
@@ -81,6 +80,7 @@ public class MyStack {
 			if (size == Integer.MAX_VALUE) {
 				throw new IndexOutOfBoundsException();
 			}
+			modCount = modCount + 1;
 			int l = array.length;
 			if (size == l) {
 				// 防止扩容溢出
@@ -104,6 +104,7 @@ public class MyStack {
 			if (size == 0) {
 				throw new NoSuchElementException();
 			}
+			modCount = modCount + 1;
 			E e = (E) array[size - 1];
 			array[size - 1] = null;
 			size = size - 1;
@@ -111,6 +112,19 @@ public class MyStack {
 				array = Arrays.copyOf(array, array.length / 2);
 			}
 			return e;
+		}
+
+		/**
+		 * 返回栈顶元素，但是不删除
+		 * 
+		 * @return
+		 */
+		@SuppressWarnings("unchecked")
+		public E top() {
+			if (size == 0) {
+				return null;
+			}
+			return (E) array[size - 1];
 		}
 
 		@Override
@@ -161,8 +175,13 @@ public class MyStack {
 
 				private int cursor = 0;
 
+				private final int count = modCount;
+
 				@Override
 				public boolean hasNext() {
+					if (count != modCount) {
+						throw new ConcurrentModificationException();
+					}
 					return cursor < size;
 				}
 
@@ -171,6 +190,9 @@ public class MyStack {
 				public E next() {
 					if (cursor >= size) {
 						throw new NoSuchElementException();
+					}
+					if (count != modCount) {
+						throw new ConcurrentModificationException();
 					}
 					E e = (E) array[cursor];
 					cursor = cursor + 1;
@@ -253,6 +275,7 @@ public class MyStack {
 
 		@Override
 		public void clear() {
+			modCount = modCount + 1;
 			Arrays.fill(array, null);
 			array = new Object[DEFAULT_SIZE];
 			this.size = 0;
@@ -277,6 +300,7 @@ public class MyStack {
 			if (isEmpty()) {
 				throw new NoSuchElementException();
 			}
+			modCount = modCount + 1;
 			return (E) array[size - 1];
 		}
 	}
