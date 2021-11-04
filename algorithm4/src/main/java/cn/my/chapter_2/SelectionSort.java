@@ -18,18 +18,13 @@ public class SelectionSort extends AbstractSort {
 		}
 		for (int i = 0; i < a.length; i++) {
 			log.info("第{}趟:{}", i + 1, Arrays.toString(a));
+			int min = i;
 			for (int j = i + 1; j < a.length; j++) {
-				if (!less(a[i], a[j])) {
-					exch(a, i, j);
+				if (less(a[j], a[min])) {
+					min = j;
 				}
 			}
+			exch(a, i, min);
 		}
-	}
-
-	public static void main(String[] args) {
-		Integer[] a = new Integer[] { 3, 4, 1, 2, 5, 0 };
-		AbstractSort sort = new SelectionSort();
-		sort.sort(a);
-		sort.show(a);
 	}
 }
