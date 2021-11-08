@@ -2,7 +2,6 @@ package cn.my.chapter_2;
 
 import java.lang.reflect.Array;
 import java.security.InvalidParameterException;
-import java.util.Arrays;
 
 /**
  * 归并排序
@@ -24,7 +23,7 @@ public class MergeSort extends AbstractSort {
 	}
 
 	private <T extends Comparable<T>> void sort(T[] a, int left, int right, T[] temp) {
-		if (right <= left) {
+		if (left < right) {
 			int mid = left + ((right - left) / 2);
 			sort(a, left, mid, temp);
 			sort(a, mid + 1, right, temp);
@@ -35,7 +34,7 @@ public class MergeSort extends AbstractSort {
 	private <T extends Comparable<T>> void merge(T[] a, int left, int mid, int right, T[] temp) {
 		int i = left;
 		int j = mid + 1;
-		temp = Arrays.copyOfRange(a, left, right + 1);
+		System.arraycopy(a, left, temp, left, right + 1 - left);
 		for (int k = left; k <= right; k++) {
 			if (i > mid) {
 				a[k] = temp[j++];
