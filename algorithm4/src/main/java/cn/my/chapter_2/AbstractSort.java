@@ -31,11 +31,11 @@ public abstract class AbstractSort {
 		return true;
 	}
 
-	<T extends Comparable<T>> boolean less(T v, T w) {
+	protected <T extends Comparable<T>> boolean less(T v, T w) {
 		return v.compareTo(w) < 0;
 	}
 
-	<T extends Comparable<T>> void exch(T[] a, int i, int j) {
+	protected <T extends Comparable<T>> void exch(T[] a, int i, int j) {
 		if (isNull(a)) {
 			throw new InvalidParameterException();
 		}
@@ -58,7 +58,7 @@ public abstract class AbstractSort {
 		log.info(str);
 	}
 
-	<T extends Comparable<T>> boolean isNull(T[] a) {
+	protected <T extends Comparable<T>> boolean isNull(T[] a) {
 		return Objects.isNull(a) || a.length == 0;
 	}
 }
