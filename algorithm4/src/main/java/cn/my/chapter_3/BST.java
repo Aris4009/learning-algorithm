@@ -102,7 +102,7 @@ public class BST<K extends Comparable<K>, V> {
 	}
 
 	/**
-	 * 前序遍历
+	 * 中序遍历
 	 * 
 	 * @param node    结点
 	 * @param builder 字符串
