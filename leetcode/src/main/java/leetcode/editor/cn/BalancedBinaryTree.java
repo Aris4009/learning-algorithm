@@ -57,7 +57,18 @@ public class BalancedBinaryTree {
 	 */
 	class Solution {
 		public boolean isBalanced(TreeNode root) {
-			return true;
+			if (root == null) {
+				return true;
+			}
+			return Math.abs(height(root.left) - height(root.right)) < 2 && isBalanced(root.left)
+					&& isBalanced(root.right);
+		}
+
+		private int height(TreeNode node) {
+			if (node == null) {
+				return 0;
+			}
+			return Math.max(height(node.left), height(node.right)) + 1;
 		}
 	}
 //leetcode submit region end(Prohibit modification and deletion)
