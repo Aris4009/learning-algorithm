@@ -20,31 +20,45 @@
 // Related Topics 树 深度优先搜索 二叉树 👍 837 👎 0
 
 package leetcode.editor.cn;
-public class DiameterOfBinaryTree{
-    public static void main(String[] args){
-        Solution solution = new DiameterOfBinaryTree().new Solution();
-    }
-    //leetcode submit region begin(Prohibit modification and deletion)
-/**
- * Definition for a binary tree node.
- * public class TreeNode {
- *     int val;
- *     TreeNode left;
- *     TreeNode right;
- *     TreeNode() {}
- *     TreeNode(int val) { this.val = val; }
- *     TreeNode(int val, TreeNode left, TreeNode right) {
- *         this.val = val;
- *         this.left = left;
- *         this.right = right;
- *     }
- * }
- */
-class Solution {
-    public int diameterOfBinaryTree(TreeNode root) {
 
-    }
-}
+import leetcode.editor.cn.my.TreeNode;
+
+public class DiameterOfBinaryTree {
+	public static void main(String[] args) {
+		Solution solution = new DiameterOfBinaryTree().new Solution();
+		TreeNode node = new TreeNode(1, new TreeNode(2, new TreeNode(4), new TreeNode(5)), new TreeNode(3));
+		System.out.println(solution.diameterOfBinaryTree(node));
+	}
+
+	// leetcode submit region begin(Prohibit modification and deletion)
+	/**
+	 * Definition for a binary tree node. public class TreeNode { int val; TreeNode
+	 * left; TreeNode right; TreeNode() {} TreeNode(int val) { this.val = val; }
+	 * TreeNode(int val, TreeNode left, TreeNode right) { this.val = val; this.left
+	 * = left; this.right = right; } }
+	 */
+	class Solution {
+
+		int max = 0;
+
+		public int diameterOfBinaryTree(TreeNode root) {
+			if (root == null) {
+				return 0;
+			}
+			helper(root);
+			return max;
+		}
+
+		private int helper(TreeNode node) {
+			if (node == null) {
+				return 0;
+			}
+			int left = helper(node.left);
+			int right = helper(node.right);
+			max = Math.max(max, left + right);
+			return Math.max(left, right) + 1;
+		}
+	}
 //leetcode submit region end(Prohibit modification and deletion)
 
 }
