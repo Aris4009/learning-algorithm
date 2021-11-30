@@ -50,31 +50,44 @@
 // Related Topics 树 深度优先搜索 广度优先搜索 二叉搜索树 哈希表 双指针 二叉树 👍 296 👎 0
 
 package leetcode.editor.cn;
-public class TwoSumIvInputIsABst{
-    public static void main(String[] args){
-        Solution solution = new TwoSumIvInputIsABst().new Solution();
-    }
-    //leetcode submit region begin(Prohibit modification and deletion)
-/**
- * Definition for a binary tree node.
- * public class TreeNode {
- *     int val;
- *     TreeNode left;
- *     TreeNode right;
- *     TreeNode() {}
- *     TreeNode(int val) { this.val = val; }
- *     TreeNode(int val, TreeNode left, TreeNode right) {
- *         this.val = val;
- *         this.left = left;
- *         this.right = right;
- *     }
- * }
- */
-class Solution {
-    public boolean findTarget(TreeNode root, int k) {
 
-    }
-}
+import java.util.HashSet;
+import java.util.Set;
+
+import leetcode.editor.cn.my.TreeNode;
+
+public class TwoSumIvInputIsABst {
+	public static void main(String[] args) {
+		Solution solution = new TwoSumIvInputIsABst().new Solution();
+	}
+
+	// leetcode submit region begin(Prohibit modification and deletion)
+	/**
+	 * Definition for a binary tree node. public class TreeNode { int val; TreeNode
+	 * left; TreeNode right; TreeNode() {} TreeNode(int val) { this.val = val; }
+	 * TreeNode(int val, TreeNode left, TreeNode right) { this.val = val; this.left
+	 * = left; this.right = right; } }
+	 */
+	class Solution {
+		public boolean findTarget(TreeNode root, int k) {
+			if (root == null) {
+				return false;
+			}
+			Set<Integer> set = new HashSet<>();
+			return helper(root, k, set);
+		}
+
+		private boolean helper(TreeNode node, int k, Set<Integer> set) {
+			if (node == null) {
+				return false;
+			}
+			if (set.contains(k - node.val)) {
+				return true;
+			}
+			set.add(node.val);
+			return helper(node.left, k, set) || helper(node.right, k, set);
+		}
+	}
 //leetcode submit region end(Prohibit modification and deletion)
 
 }
