@@ -51,6 +51,8 @@ import leetcode.editor.cn.my.TreeNode;
 public class CousinsInBinaryTree {
 	public static void main(String[] args) {
 		Solution solution = new CousinsInBinaryTree().new Solution();
+		TreeNode root = new TreeNode(1,new TreeNode(2,null,new TreeNode(4)),new TreeNode(3));
+		System.out.println(solution.isCousins(root,4,3));
 	}
 
 	// leetcode submit region begin(Prohibit modification and deletion)
@@ -62,34 +64,50 @@ public class CousinsInBinaryTree {
 	 */
 	class Solution {
 
-		private TreeNode a;
+		private TreeNode xParent;
 
-		private TreeNode b;
+		private TreeNode yParent;
 
-		private int k1 = 0;
+		private boolean xFlag;
 
-		private int k2 = 0;
+		private boolean yFlag;
+
+		private int xDeep;
+
+		private int yDeep;
+
+		private int x;
+
+		private int y;
 
 		public boolean isCousins(TreeNode root, int x, int y) {
-			helper(root, x, k1);
-			helper(root, y, k2);
-			return a != b && k1 == k2;
+			this.x = x;
+			this.y = y;
+			helper(root,null,0);
+			return xParent!=yParent&&xDeep==yDeep;
 		}
 
-		private int helper(TreeNode node, int n) {
-			if (node == null) {
-				return 0;
+		private void helper(TreeNode node,TreeNode parent,int deep){
+			if (node==null){
+				return;
 			}
-			if (node.val == n) {
-				a = node;
-				return 1;
+			if (node.val==x){
+				xParent = parent;
+				xDeep = deep;
+				xFlag = true;
+			}else if(node.val==y){
+				yParent=parent;
+				yDeep = deep;
+				yFlag=true;
 			}
-			int k = 0;
-			if (node.left != null && node.right != null) {
-				k = k + 1;
+			if (xFlag&&yFlag){
+				return;
 			}
-			helper(node.left, n, k);
-			helper(node.right, n, k);
+			helper(node.left,node,deep+1);
+			if (xFlag&&yFlag){
+				return;
+			}
+			helper(node.right,node,deep+1);
 		}
 	}
 //leetcode submit region end(Prohibit modification and deletion)
