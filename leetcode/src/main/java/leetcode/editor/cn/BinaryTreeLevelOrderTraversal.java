@@ -26,7 +26,7 @@
 
 package leetcode.editor.cn;
 
-import java.util.List;
+import java.util.*;
 
 import leetcode.editor.cn.my.TreeNode;
 
@@ -52,7 +52,28 @@ public class BinaryTreeLevelOrderTraversal{
  */
 class Solution {
     public List<List<Integer>> levelOrder(TreeNode root) {
-
+        if (root==null){
+            return Collections.emptyList();
+        }
+        List<List<Integer>> list= new ArrayList<>();
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.offer(root);
+        while (!queue.isEmpty()){
+            int size = queue.size();
+            List<Integer> l = new ArrayList<>();
+            for(int i=0;i<size;i++){
+                TreeNode node = queue.poll();
+                l.add(node.val);
+                if(node.left!=null){
+                    queue.offer(node.left);
+                }
+                if (node.right!=null){
+                    queue.offer(node.right);
+                }
+            }
+            list.add(l);
+        }
+        return list;
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
