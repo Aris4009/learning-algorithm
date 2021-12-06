@@ -31,6 +31,7 @@ class Solution {
         }
         int mid = left+((right-left)>>1);
         TreeNode node = new TreeNode(nums[mid]);
+
         node.left = helper(nums,left,mid-1);
         node.right = helper(nums,mid+1,right);
         return node;

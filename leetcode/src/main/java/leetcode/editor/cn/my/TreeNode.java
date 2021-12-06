@@ -24,11 +24,15 @@ public class TreeNode {
 		if (a == null || a.length == 0) {
 			throw new InvalidParameterException();
 		}
-		return helper(a, 0);
+		return helper(a,0);
 	}
 
-	private static TreeNode helper(Integer[] a, int index) {
+	private static TreeNode helper(Integer[] a,int index) {
 		if (index >= a.length) {
+			return null;
+		}
+		Integer val = a[index];
+		if (val==null){
 			return null;
 		}
 		TreeNode node = new TreeNode(a[index]);
