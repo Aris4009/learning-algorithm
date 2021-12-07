@@ -40,4 +40,9 @@ public class TreeNode {
 		node.right = helper(a, index * 2 + 2);
 		return node;
 	}
+
+	@Override
+	public String toString() {
+		return "["+this.left+","+this.val+","+this.right+"]";
+	}
 }
