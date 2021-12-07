@@ -53,17 +53,16 @@ public class ErChaSouSuoShuDeDiKdaJieDianLcof{
  */
 class Solution {
 
-    private int[] array;
-
     private int k;
+
+    private int n;
 
     private int index;
 
     public int kthLargest(TreeNode root, int k) {
         this.k = k;
-        this.array = new int[k];
         helper(root);
-        return this.array[k-1];
+        return n;
     }
 
     private void helper(TreeNode node){
@@ -73,7 +72,7 @@ class Solution {
         if (index<k){
             helper(node.right);
             if (index<k){
-                this.array[index] = node.val;
+                n = node.val;
             }
             this.index ++;
             helper(node.left);
