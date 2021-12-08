@@ -39,6 +39,9 @@ package leetcode.editor.cn;
 
 import leetcode.editor.cn.my.TreeNode;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ValidateBinarySearchTree {
 	public static void main(String[] args) {
 		Solution solution = new ValidateBinarySearchTree().new Solution();
@@ -53,20 +56,29 @@ public class ValidateBinarySearchTree {
 	 */
 	class Solution {
 
-		private long a = Long.MIN_VALUE;
+		private List<Integer> list;
 
 		public boolean isValidBST(TreeNode root) {
-			if (root == null) {
+			if (root == null || (root.left == null && root.right == null)) {
 				return true;
 			}
-			if (!isValidBST(root.left)) {
-				return false;
+			list = new ArrayList<>();
+			helper(root);
+			for (int i = 1; i < list.size(); i++) {
+				if (list.get(i - 1) >= list.get(i)) {
+					return false;
+				}
 			}
-			if (root.val <= a) {
-				return false;
+			return true;
+		}
+
+		private void helper(TreeNode node) {
+			if (node == null) {
+				return;
 			}
-			a = root.val;
-			return isValidBST(root.right);
+			helper(node.left);
+			list.add(node.val);
+			helper(node.right);
 		}
 	}
 //leetcode submit region end(Prohibit modification and deletion)
