@@ -20,10 +20,51 @@
 
 package leetcode.editor.cn;
 
-import leetcode.editor.cn.my.TreeNode;
-
 import java.util.HashMap;
 import java.util.Map;
+
+import leetcode.editor.cn.my.TreeNode;
+
+/**
+ * 中序 [8,4,9,2,5,10,1,11,6,3,7] m int left int right
+ *
+ * left=0 right=10 rootIndex = 6
+ *
+ * [[8,4,9,2,5,10],[1],[11,6,3,7]]
+ *
+ *
+ *
+ *
+ * 后序 [8,9,4,10,5,2,11,6,7,3,1] n int left int right
+ *
+ * [[8,9,4,10,5,2],[11,6,7,3],[1]]
+ *
+ * left=0 right = left+size
+ *
+ *
+ *
+ *
+ *
+ *
+ * 1.寻找跟节点 后续遍历的最后一个元素就是跟节点 root = new Tree(n[n.length-1])
+ *
+ * 2.从中序遍历中区分左右子树
+ *
+ * 数组长度 11
+ *
+ * root.index = 6
+ *
+ * 在中序遍历中： 左子树数量 0~root.index-1 6 左子树索引范围【0】~【5】 [8,4,9,2,5,10]
+ *
+ * 右子树数量 root.index+1 4 右子树索引范围【7】~【10】 [11,6,3,7]
+ *
+ * 在后序遍历中： root.index = length-1 = 10
+ *
+ * 左子树索引范围 0~root.index-5 【0】~【5】[8,9,4,10,5,2] 右子树索引范围 root.index-4
+ * root.index-1 【6】~【9】[11,6,7,3]
+ *
+ * 3.寻找左子树的根节点
+ */
 
 public class ConstructBinaryTreeFromInorderAndPostorderTraversal {
 	public static void main(String[] args) {
