@@ -76,24 +76,21 @@ public class PathSumIi {
 			return list;
 		}
 
-		private void helper(TreeNode node, int targetSum, List<Integer> sub) {
+		private void helper(TreeNode node, int targetSum, LinkedList<Integer> sub) {
 			if (node == null) {
-				if (targetSum == 0 && !sub.isEmpty()) {
-					List<Integer> l = new LinkedList<>(sub);
-					list.add(l);
-					sub.clear();
-				}
 				return;
 			}
 			if (sub == null) {
 				sub = new LinkedList<>();
 			}
+			sub.add(node.val);
 			targetSum = targetSum - node.val;
-			if (targetSum >= 0) {
-				sub.add(node.val);
+			if (node.left == null && node.right == null && targetSum == 0) {
+				list.add(new LinkedList<>(sub));
 			}
 			helper(node.left, targetSum, sub);
 			helper(node.right, targetSum, sub);
+			sub.removeLast();
 		}
 	}
 //leetcode submit region end(Prohibit modification and deletion)
