@@ -45,39 +45,61 @@
 // Related Topics 树 深度优先搜索 广度优先搜索 二叉树 👍 619 👎 0
 
 package leetcode.editor.cn;
-public class PopulatingNextRightPointersInEachNode{
-    public static void main(String[] args){
-        Solution solution = new PopulatingNextRightPointersInEachNode().new Solution();
-    }
-    //leetcode submit region begin(Prohibit modification and deletion)
-/*
-// Definition for a Node.
-class Node {
-    public int val;
-    public Node left;
-    public Node right;
-    public Node next;
 
-    public Node() {}
-    
-    public Node(int _val) {
-        val = _val;
-    }
+import leetcode.editor.cn.my.Node;
 
-    public Node(int _val, Node _left, Node _right, Node _next) {
-        val = _val;
-        left = _left;
-        right = _right;
-        next = _next;
-    }
-};
-*/
+import java.util.*;
 
-class Solution {
-    public Node connect(Node root) {
-        
-    }
-}
+public class PopulatingNextRightPointersInEachNode {
+	public static void main(String[] args) {
+		Solution solution = new PopulatingNextRightPointersInEachNode().new Solution();
+		Node node = new Node(1, new Node(2, new Node(4, null, null, null), new Node(5, null, null, null), null),
+				new Node(3, new Node(6, null, null, null), new Node(7, null, null, null), null), null);
+		solution.connect(node);
+	}
+	// leetcode submit region begin(Prohibit modification and deletion)
+	/*
+	 * // Definition for a Node. class Node { public int val; public Node left;
+	 * public Node right; public Node next;
+	 *
+	 * public Node() {}
+	 *
+	 * public Node(int _val) { val = _val; }
+	 *
+	 * public Node(int _val, Node _left, Node _right, Node _next) { val = _val; left
+	 * = _left; right = _right; next = _next; } };
+	 */
+
+	class Solution {
+
+		private Map<Integer, Node> map;
+
+		public Node connect(Node root) {
+			Queue<Node> queue = new LinkedList<>();
+			queue.offer(root);
+			List<Node> list = new ArrayList<>();
+			while (!queue.isEmpty()) {
+				int size = queue.size();
+				for (int i = 0; i < size; i++) {
+					Node node = queue.poll();
+					list.add(node);
+					if (node != null) {
+						if (node.left != null) {
+							queue.offer(node.left);
+						}
+						if (node.right != null) {
+							queue.offer(node.right);
+						}
+					}
+				}
+				for (int i = 1; i < list.size(); i++) {
+					list.get(i - 1).next = list.get(i);
+				}
+				list.clear();
+			}
+			return root;
+		}
+	}
 //leetcode submit region end(Prohibit modification and deletion)
 
 }
