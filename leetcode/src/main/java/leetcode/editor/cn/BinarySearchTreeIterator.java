@@ -61,6 +61,9 @@
 
 package leetcode.editor.cn;
 
+import java.util.LinkedList;
+import java.util.Queue;
+
 import leetcode.editor.cn.my.TreeNode;
 
 public class BinarySearchTreeIterator {
@@ -76,22 +79,31 @@ public class BinarySearchTreeIterator {
 	 */
 	class BSTIterator {
 
-		private TreeNode cursor;
+		private Queue<Integer> queue;
 
 		public BSTIterator(TreeNode root) {
-
+			this.queue = new LinkedList<>();
+			helper(root);
 		}
 
 		public int next() {
-			return 0;
+			if (queue.isEmpty()) {
+				return -1;
+			}
+			return queue.poll();
 		}
 
 		public boolean hasNext() {
-			return false;
+			return !queue.isEmpty();
 		}
 
-		private TreeNode helper(TreeNode node, TreeNode n) {
-			return null;
+		private void helper(TreeNode node) {
+			if (node == null) {
+				return;
+			}
+			helper(node.left);
+			queue.offer(node.val);
+			helper(node.right);
 		}
 	}
 
