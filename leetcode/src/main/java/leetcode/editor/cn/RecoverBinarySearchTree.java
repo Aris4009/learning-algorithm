@@ -49,10 +49,24 @@ public class RecoverBinarySearchTree {
 	 */
 	class Solution {
 
+		private TreeNode[] n;
+
 		public void recoverTree(TreeNode root) {
-			if (root == null || (root.left == null && root.right == null)) {
+			if (root == null) {
 				return;
 			}
+
+		}
+
+		private void helper(TreeNode node) {
+			if (node == null) {
+				return;
+			}
+			helper(node.left);
+			if (n[0]==null){
+				n[0] = 
+			}
+			helper(node.right);
 		}
 	}
 //leetcode submit region end(Prohibit modification and deletion)
