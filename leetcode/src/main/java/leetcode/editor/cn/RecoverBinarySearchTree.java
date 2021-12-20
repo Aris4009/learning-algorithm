@@ -38,6 +38,8 @@ import leetcode.editor.cn.my.TreeNode;
 public class RecoverBinarySearchTree {
 	public static void main(String[] args) {
 		Solution solution = new RecoverBinarySearchTree().new Solution();
+		TreeNode root = new TreeNode(1, new TreeNode(3, null, new TreeNode(2)), null);
+		solution.recoverTree(root);
 	}
 
 	// leetcode submit region begin(Prohibit modification and deletion)
@@ -49,13 +51,20 @@ public class RecoverBinarySearchTree {
 	 */
 	class Solution {
 
-		private TreeNode[] n;
+		private TreeNode cur = new TreeNode(Integer.MIN_VALUE);
+
+		private TreeNode m;
+
+		private TreeNode n;
 
 		public void recoverTree(TreeNode root) {
 			if (root == null) {
 				return;
 			}
-
+			helper(root);
+			int t = m.val;
+			m.val = n.val;
+			n.val = t;
 		}
 
 		private void helper(TreeNode node) {
@@ -63,9 +72,13 @@ public class RecoverBinarySearchTree {
 				return;
 			}
 			helper(node.left);
-			if (n[0]==null){
-				n[0] = 
+			if (cur.val > node.val && m == null) {
+				m = cur;
 			}
+			if (cur.val > node.val && m != null) {
+				n = node;
+			}
+			cur = node;
 			helper(node.right);
 		}
 	}
