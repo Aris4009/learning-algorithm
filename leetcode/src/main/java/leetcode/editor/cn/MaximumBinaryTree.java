@@ -46,31 +46,57 @@
 // Related Topics 栈 树 数组 分治 二叉树 单调栈 👍 354 👎 0
 
 package leetcode.editor.cn;
-public class MaximumBinaryTree{
-    public static void main(String[] args){
-        Solution solution = new MaximumBinaryTree().new Solution();
-    }
-    //leetcode submit region begin(Prohibit modification and deletion)
-/**
- * Definition for a binary tree node.
- * public class TreeNode {
- *     int val;
- *     TreeNode left;
- *     TreeNode right;
- *     TreeNode() {}
- *     TreeNode(int val) { this.val = val; }
- *     TreeNode(int val, TreeNode left, TreeNode right) {
- *         this.val = val;
- *         this.left = left;
- *         this.right = right;
- *     }
- * }
- */
-class Solution {
-    public TreeNode constructMaximumBinaryTree(int[] nums) {
 
-    }
-}
+import leetcode.editor.cn.my.TreeNode;
+
+public class MaximumBinaryTree {
+	public static void main(String[] args) {
+		Solution solution = new MaximumBinaryTree().new Solution();
+	}
+
+	// leetcode submit region begin(Prohibit modification and deletion)
+	/**
+	 * Definition for a binary tree node. public class TreeNode { int val; TreeNode
+	 * left; TreeNode right; TreeNode() {} TreeNode(int val) { this.val = val; }
+	 * TreeNode(int val, TreeNode left, TreeNode right) { this.val = val; this.left
+	 * = left; this.right = right; } }
+	 */
+	class Solution {
+		public TreeNode constructMaximumBinaryTree(int[] nums) {
+			if (nums == null || nums.length == 0) {
+				return null;
+			}
+			int low = 0;
+			int high = nums.length - 1;
+			int position = position(nums, low, high);
+			return helper(nums, low, high, position);
+		}
+
+		private TreeNode helper(int[] nums, int low, int high, int position) {
+			if (position == -1) {
+				return null;
+			}
+			TreeNode root = new TreeNode(nums[position]);
+			root.left = helper(nums, low, position - 1, position(nums, low, position - 1));
+			root.right = helper(nums, position + 1, high, position(nums, position + 1, high));
+			return root;
+		}
+
+		private int position(int[] nums, int low, int high) {
+			if (low < 0 || high >= nums.length || low > high) {
+				return -1;
+			}
+			int max = nums[low];
+			int position = low;
+			for (int i = low + 1; i <= high; i++) {
+				if (nums[i] > max) {
+					max = nums[i];
+					position = i;
+				}
+			}
+			return position;
+		}
+	}
 //leetcode submit region end(Prohibit modification and deletion)
 
 }
