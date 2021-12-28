@@ -29,8 +29,8 @@
 
 package leetcode.editor.cn;
 
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.HashMap;
+import java.util.Map;
 
 import leetcode.editor.cn.my.TreeNode;
 
@@ -47,40 +47,50 @@ public class FlipEquivalentBinaryTrees {
 	 * = left; this.right = right; } }
 	 */
 	class Solution {
+
+		private Map<Integer, TreeNode> map1;
+
+		private Map<Integer, TreeNode> map2;
+
 		public boolean flipEquiv(TreeNode root1, TreeNode root2) {
+			if (root1 == null && root2 == null) {
+				return true;
+			}
 			if (root1 == null || root2 == null) {
 				return false;
 			}
 			if (root1.val != root2.val) {
 				return false;
 			}
-			Queue<TreeNode> queue1 = new LinkedList<>();
-			queue1.offer(root1);
-			Queue<TreeNode> queue2 = new LinkedList<>();
-			queue2.offer(root2);
+			map1 = new HashMap<>();
+			helper(root1, map1);
+			map2 = new HashMap<>();
+			helper(root2, map2);
+			if (map1.size() != map2.size()) {
+				return false;
+			}
 			boolean flag = true;
-			while (!queue1.isEmpty() && !queue2.isEmpty() && flag) {
-				int size1 = queue1.size();
-				int size2 = queue2.size();
-				if (size1 != size2) {
+			for (Map.Entry<Integer, TreeNode> entry : map1.entrySet()) {
+				if (map2.get(entry.getKey()) != null && entry.getValue().val != map2.get(entry.getKey()).val) {
 					flag = false;
 					break;
 				}
-				for (int i = 0; i < size1; i++) {
-					TreeNode node1 = queue1.poll();
-					TreeNode node2 = queue2.poll();
-					if (node1.val != node2.val) {
-						flag = false;
-						break;
-					}
-					if (node1.left != null) {
-						queue1.offer(node1.left);
-					}
-					if (node1.right != null) {
-						queue1.offer(node1.right);
-					}
-				}
 			}
+			return flag;
+		}
+
+		private void helper(TreeNode node, Map<Integer, TreeNode> map) {
+			if (node == null) {
+				return;
+			}
+			if (node.left != null) {
+				map.put(node.left.val, node);
+			}
+			if (node.right != null) {
+				map.put(node.right.val, node);
+			}
+			helper(node.left, map);
+			helper(node.right, map);
 		}
 	}
 //leetcode submit region end(Prohibit modification and deletion)
