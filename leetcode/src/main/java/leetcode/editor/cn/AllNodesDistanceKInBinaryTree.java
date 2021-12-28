@@ -35,7 +35,10 @@
 
 package leetcode.editor.cn;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 
 import leetcode.editor.cn.my.TreeNode;
 
@@ -73,49 +76,50 @@ public class AllNodesDistanceKInBinaryTree {
 	 */
 	class Solution {
 
-		private Map<Integer, TreeNode> map;
-
 		private List<Integer> list;
 
 		public List<Integer> distanceK(TreeNode root, TreeNode target, int k) {
 			if (root == null) {
 				return Collections.emptyList();
 			}
-			map = new HashMap<>();
-			parents(root);
 			list = new LinkedList<>();
-			find(target, null, 0, k);
+			helper(target, k);
+			reverse(root, target, null);
+			helper(target, k);
 			return list;
 		}
 
-		private void parents(TreeNode node) {
-			if (node.left != null) {
-				map.put(node.left.val, node);
-				parents(node.left);
+		private void helper(TreeNode target, int k) {
+			if (target == null) {
+				return;
 			}
-			if (node.right != null) {
-				map.put(node.right.val, node);
-				parents(node.right);
+			if (k == 0 && !list.contains(target.val)) {
+				list.add(target.val);
 			}
+			helper(target.left, k - 1);
+			helper(target.right, k - 1);
 		}
 
-		private void find(TreeNode node, TreeNode from, int depth, int k) {
+		private TreeNode reverse(TreeNode node, TreeNode target, TreeNode parent) {
 			if (node == null) {
-				return;
+				return null;
 			}
-			if (depth == k) {
-				list.add(node.val);
-				return;
+			if (node.val == target.val) {
+				target.left = parent;
+				target.right = null;
+				return target;
 			}
-			if (node.left != from) {
-				find(node.left, node, depth + 1, k);
+			TreeNode left = reverse(node.left, target, node);
+			if (left != null) {
+				node.left = parent;
+				return node;
 			}
-			if (node.right != from) {
-				find(node.right, node, depth + 1, k);
+			TreeNode right = reverse(node.right, target, node);
+			if (right != null) {
+				node.right = parent;
+				return node;
 			}
-			if (map.get(node.val) != from) {
-				find(map.get(node.val), node, depth + 1, k);
-			}
+			return null;
 		}
 	}
 //leetcode submit region end(Prohibit modification and deletion)
