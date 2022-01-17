@@ -46,8 +46,8 @@
 
 package leetcode.editor.cn;
 
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.HashMap;
+import java.util.Map;
 
 public class LongestSubstringWithoutRepeatingCharacters {
 	public static void main(String[] args) {
@@ -65,14 +65,24 @@ public class LongestSubstringWithoutRepeatingCharacters {
 			if (s.length() == 1) {
 				return 1;
 			}
-			Queue<Character> queue = new LinkedList<>();
+//			Queue<Character> queue = new LinkedList<>();
+//			int max = 0;
+//			for (int i = 0; i < s.length(); i++) {
+//				while (queue.contains(s.charAt(i))) {
+//					queue.poll();
+//				}
+//				queue.offer(s.charAt(i));
+//				max = Math.max(max, queue.size());
+//			}
+			Map<Character, Integer> map = new HashMap<>();
 			int max = 0;
+			int j = 0;
 			for (int i = 0; i < s.length(); i++) {
-				while (queue.contains(s.charAt(i))) {
-					queue.poll();
+				if (map.containsKey(s.charAt(i))) {
+					j = Math.max(j, map.get(s.charAt(i)) + 1);
 				}
-				queue.offer(s.charAt(i));
-				max = Math.max(max, queue.size());
+				map.put(s.charAt(i), i);
+				max = Math.max(max, i - j + 1);
 			}
 			return max;
 		}
