@@ -51,6 +51,7 @@ public class LongestPalindromicSubstring {
 	// leetcode submit region begin(Prohibit modification and deletion)
 	class Solution {
 		public String longestPalindrome(String s) {
+			String str = "";
 			if (s == null) {
 				return null;
 			}
@@ -58,35 +59,25 @@ public class LongestPalindromicSubstring {
 			if (len < 2) {
 				return s;
 			}
-			boolean[][] dp = new boolean[len][len];
-			for (int i = 0; i < len; i++) {
-				dp[i][i] = true;
-			}
-			char[] chars = s.toCharArray();
-			int max = 1;
-			int begin = 0;
-			for (int l = 2; l <= len; l++) {
-				for (int i = 0; i < len; i++) {
-					int j = l + i - 1;
-					if (j >= len) {
-						break;
-					}
-					if (chars[i] != chars[j]) {
-						dp[i][j] = false;
-					} else {
-						if (j - i < 3) {
-							dp[i][j] = true;
-						} else {
-							dp[i][j] = dp[i + 1][j - 1];
-						}
-					}
-					if (dp[i][j] && j - i + 1 > max) {
-						max = j - i + 1;
-						begin = i;
-					}
+			for (int i = 0; i < s.length(); i++) {
+				String s1 = find(s, i, i);
+				String s2 = find(s, i, i + 1);
+				if (str.length() < s1.length()) {
+					str = s1;
+				}
+				if (str.length() < s2.length()) {
+					str = s2;
 				}
 			}
-			return s.substring(begin, begin + max);
+			return str;
+		}
+
+		private String find(String s, int left, int right) {
+			while (left >= 0 && right < s.length() && s.charAt(left) == s.charAt(right)) {
+				left = left - 1;
+				right = right + 1;
+			}
+			return s.substring(left + 1, right);
 		}
 	}
 //leetcode submit region end(Prohibit modification and deletion)
