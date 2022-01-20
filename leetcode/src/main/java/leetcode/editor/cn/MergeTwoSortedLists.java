@@ -41,6 +41,9 @@ import leetcode.editor.cn.my.ListNode;
 public class MergeTwoSortedLists {
 	public static void main(String[] args) {
 		Solution solution = new MergeTwoSortedLists().new Solution();
+		ListNode list1 = new ListNode(1, new ListNode(2, new ListNode(4)));
+		ListNode list2 = new ListNode(1, new ListNode(3, new ListNode(4)));
+		solution.mergeTwoLists(list1, list2);
 	}
 
 	// leetcode submit region begin(Prohibit modification and deletion)
@@ -57,15 +60,22 @@ public class MergeTwoSortedLists {
 			if (list2 == null) {
 				return list1;
 			}
-			ListNode l = new ListNode();
+//			ListNode l = new ListNode();
+//			if (list1.val <= list2.val) {
+//				l.val = list1.val;
+//				l.next = mergeTwoLists(list1.next, list2);
+//			} else {
+//				l.val = list2.val;
+//				l.next = mergeTwoLists(list1, list2.next);
+//			}
+//			return l;
 			if (list1.val <= list2.val) {
-				l.val = list1.val;
-				l.next = mergeTwoLists(list1.next, list2);
+				list1.next = mergeTwoLists(list1.next, list2);
+				return list1;
 			} else {
-				l.val = list2.val;
-				l.next = mergeTwoLists(list1, list2.next);
+				list2.next = mergeTwoLists(list1, list2.next);
+				return list2;
 			}
-			return l;
 		}
 	}
 //leetcode submit region end(Prohibit modification and deletion)
