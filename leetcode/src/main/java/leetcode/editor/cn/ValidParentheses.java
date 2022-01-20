@@ -61,7 +61,7 @@ import java.util.Deque;
 public class ValidParentheses {
 	public static void main(String[] args) {
 		Solution solution = new ValidParentheses().new Solution();
-		String s = "([}}])";
+		String s = "){";
 		solution.isValid(s);
 	}
 
@@ -71,20 +71,20 @@ public class ValidParentheses {
 			if (s == null || s.length() % 2 != 0) {
 				return false;
 			}
-			Character a1 = '(';
-			Character a2 = ')';
-			Character b1 = '{';
-			Character b2 = '}';
-			Character c1 = '[';
-			Character c2 = ']';
+			char a1 = '(';
+			char a2 = ')';
+			char b1 = '{';
+			char b2 = '}';
+			char c1 = '[';
+			char c2 = ']';
 			Deque<Character> deque = new ArrayDeque<>();
 			for (int i = 0; i < s.length(); i++) {
 				char c = s.charAt(i);
-				if (a1.equals(c) || b1.equals(c) || c1.equals(c)) {
+				if (a1 == c || b1 == c || c1 == c) {
 					deque.offerFirst(c);
 				} else {
 					Character e = deque.peek();
-					if ((c == a2 && a1.equals(e)) || (c == b2 && b1.equals(e)) || (c == c2 && c1.equals(e))) {
+					if (e != null && ((c == a2 && a1 == e) || (c == b2 && b1 == e) || (c == c2 && c1 == e))) {
 						deque.poll();
 					} else {
 						deque.offerFirst(c);
